@@ -14,3 +14,6 @@ env_variables:
   NODE_ENV: production
   PORT: "8080"
   INSTANCE_CONNECTION_NAME: clone-twitter-503801:asia-northeast3:clone-twitter-db
+  DB_USERNAME: ${DB_USERNAME}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_DATABASE: ${DB_DATABASE}
