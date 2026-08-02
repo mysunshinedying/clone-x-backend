@@ -21,10 +21,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        //ssl 설정
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        // App Engine(Cloud SQL)일 때만 유닉스 소켓 사용
+        extra: process.env.INSTANCE_CONNECTION_NAME
+          ? {
+              socketPath: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`,
+            }
+          : undefined,
         // 자동 entities 설정
         autoLoadEntities: true,
         synchronize: false,
