@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CreateFeedDto } from './dto/create-feed.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Feed } from './feed.entity';
@@ -33,7 +37,20 @@ export class FeedsService {
     return await this.feedRepository.save(newFeed);
   }
 
-  async deleteFeed(id: number) {
+  async deleteFeed(id: number, userId: number) {
+    const feed = await this.feedRepository.findOne({
+      where: { id: id },
+      relations: ['user'],
+    });
+
+    if (!feed) {
+      throw new NotFoundException('Feed not found');
+    }
+
+    if (feed?.user?.id !== userId) {
+      throw new ForbiddenException('Not allowed');
+    }
+
     return await this.feedRepository.delete(id);
   }
 

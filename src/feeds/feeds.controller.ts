@@ -32,7 +32,11 @@ export class FeedsController {
   }
 
   @Delete(':id')
-  deleteFeed(@Param('id') id: number) {
-    return this.feedsService.deleteFeed(id);
+  deleteFeed(
+    @Param('id') id: number,
+    @Req() request: Request & { user: { id: number } },
+  ) {
+    const userId = request.user.id;
+    return this.feedsService.deleteFeed(id, userId);
   }
 }
